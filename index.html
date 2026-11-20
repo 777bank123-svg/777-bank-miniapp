@@ -1,0 +1,937 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>777 BANK</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+:root { color-scheme: dark; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #050405;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at top left,
+      #66000c80, transparent 40%),
+    radial-gradient(ellipse at bottom right,
+      #66000c80, transparent 40%);
+}
+
+button, input { font: inherit; }
+button { cursor: pointer; color: white; }
+
+.tela {
+  position: relative;
+  max-width: 560px;
+  min-height: 100vh;
+  margin: auto;
+  padding: 25px 20px 45px;
+}
+
+.oculta { display: none !important; }
+
+.logo {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -2px;
+}
+
+.sete { color: #e6e6e6; }
+.bank { color: #c4001b; }
+
+.coroa {
+  text-align: center;
+  font-size: 45px;
+  color: #ddd;
+}
+
+.botao {
+  width: 100%;
+  padding: 19px;
+  border: 1px solid #b5122a;
+  border-radius: 16px;
+  background: linear-gradient(120deg,#4b0009,#160407);
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.botao.secundario {
+  background: #101010;
+  border-color: #777;
+}
+
+.botao:active, .acao:active {
+  transform: scale(.98);
+}
+
+.aviso {
+  color: #999;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 25px;
+}
+
+.entrada {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 55px;
+}
+
+.entrada .logo { font-size: 54px; }
+
+.botoes-entrada {
+  display: grid;
+  gap: 18px;
+}
+
+.voltar {
+  width: 52px;
+  height: 52px;
+  background: #100b0c;
+  border: 1px solid #47383b;
+  border-radius: 14px;
+  font-size: 27px;
+}
+
+.cabecalho {
+  text-align: center;
+  margin: 35px 0;
+}
+
+.cabecalho h1 {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
+.cabecalho p {
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.campo {
+  display: block;
+  width: 100%;
+  padding: 19px;
+  margin-bottom: 14px;
+  background: #090909;
+  color: white;
+  border: 1px solid #393033;
+  border-radius: 16px;
+  outline: none;
+}
+
+.campo:focus { border-color: #c4001b; }
+
+.grupo-senha { position: relative; }
+.grupo-senha .campo { padding-right: 65px; }
+
+.ver-senha {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 23px;
+  padding: 8px;
+}
+
+.rodape {
+  text-align: center;
+  color: #999;
+  margin-top: 24px;
+}
+
+.link {
+  background: none;
+  border: none;
+  color: #e01b32;
+  padding: 5px;
+}
+
+.mensagem {
+  color: #ff8898;
+  text-align: center;
+  min-height: 20px;
+  font-size: 14px;
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topo .logo { font-size: 28px; }
+
+.icone-topo {
+  background: none;
+  border: none;
+  font-size: 26px;
+}
+
+.saudacao { margin: 40px 0 25px; }
+.saudacao h2 { margin-bottom: 6px; }
+.saudacao p { color: #aaa; }
+
+.cartao {
+  padding: 25px;
+  border: 1px solid #a51b2d;
+  border-radius: 20px;
+  background: linear-gradient(135deg,#251619,#0a0708);
+}
+
+.cartao p {
+  color: #bbb;
+  margin-top: 0;
+}
+
+.saldo-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.saldo-linha strong {
+  font-size: clamp(22px, 6vw, 32px);
+  overflow-wrap: anywhere;
+}
+
+.olho {
+  background: none;
+  border: none;
+  font-size: 25px;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 13px;
+  margin-top: 30px;
+}
+
+.acao {
+  min-height: 115px;
+  border: 1px solid #49383c;
+  border-radius: 19px;
+  background: linear-gradient(135deg,#23191b,#0d0b0c);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+}
+
+.simbolo { font-size: 30px; }
+
+.sair {
+  margin-top: 45px;
+  background: #330006;
+}
+
+.info {
+  padding: 17px;
+  margin: 20px 0;
+  border: 1px solid #49383c;
+  border-radius: 15px;
+  background: #151012;
+  color: #ccc;
+  overflow-wrap: anywhere;
+}
+
+.item-extrato {
+  padding: 15px 5px;
+  border-bottom: 1px solid #35272b;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.item-extrato small {
+  display: block;
+  color: #aaa;
+  margin-top: 5px;
+}
+
+.positivo { color: #6ee7b7; }
+.negativo { color: #ff8898; }
+
+.fundo-modal {
+  position: fixed;
+  inset: 0;
+  background: #000c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 10;
+}
+
+.modal {
+  width: 100%;
+  max-width: 400px;
+  padding: 28px 18px;
+  border: 1px solid #c01830;
+  border-radius: 25px;
+  background: linear-gradient(140deg,#200508,#090708);
+  text-align: center;
+}
+
+.modal h2 { font-size: 22px; }
+
+.modal-botoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.modal-botoes button {
+  padding: 15px;
+  border: 1px solid #777;
+  border-radius: 13px;
+  background: #151515;
+}
+
+.modal-botoes .confirmar {
+  border-color: #db1832;
+  background: #66000d;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ENTRADA -->
+<section id="entrada" class="tela entrada">
+  <div>
+    <div class="coroa">♛</div>
+    <div class="logo">
+      <span class="sete">777</span><span class="bank">BANK</span>
+    </div>
+  </div>
+
+  <div class="botoes-entrada">
+    <button class="botao" onclick="mostrar('cadastro')">
+      ♙ &nbsp; CRIAR CONTA
+    </button>
+    <button class="botao secundario" onclick="mostrar('login')">
+      ⇥ &nbsp; ACESSAR CONTA
+    </button>
+  </div>
+
+  <p class="aviso">Banco virtual demonstrativo</p>
+</section>
+
+<!-- CADASTRO -->
+<section id="cadastro" class="tela oculta">
+  <button class="voltar" onclick="mostrar('entrada')">←</button>
+
+  <div class="logo" style="margin-top:30px">
+    <span class="sete">777</span><span class="bank">BANK</span>
+  </div>
+
+  <div class="cabecalho">
+    <h1>Criar conta</h1>
+    <p>Preencha os dados para criar sua conta.</p>
+  </div>
+
+  <form id="formCadastro">
+    <input class="campo" id="cadNome"
+      placeholder="Nome completo" minlength="3" required>
+
+    <input class="campo" id="cadUsuario"
+      placeholder="Nome de usuário" minlength="3"
+      maxlength="20" required>
+
+    <input class="campo" id="cadEmail" type="email"
+      placeholder="E-mail" required>
+
+    <div class="grupo-senha">
+      <input class="campo" id="cadSenha" type="password"
+        placeholder="Senha" minlength="8" required>
+      <button type="button" class="ver-senha"
+        onclick="alternarSenha('cadSenha')">◉</button>
+    </div>
+
+    <div class="grupo-senha">
+      <input class="campo" id="cadConfirma" type="password"
+        placeholder="Confirmar senha" minlength="8" required>
+      <button type="button" class="ver-senha"
+        onclick="alternarSenha('cadConfirma')">◉</button>
+    </div>
+
+    <p id="erroCadastro" class="mensagem"></p>
+    <button class="botao" type="submit">Criar conta</button>
+  </form>
+
+  <p class="rodape">
+    Já tem uma conta?
+    <button class="link" onclick="mostrar('login')">
+      Acessar conta
+    </button>
+  </p>
+</section>
+
+<!-- LOGIN -->
+<section id="login" class="tela oculta">
+  <button class="voltar" onclick="mostrar('entrada')">←</button>
+
+  <div class="logo" style="margin-top:40px">
+    <span class="sete">777</span><span class="bank">BANK</span>
+  </div>
+
+  <div class="cabecalho">
+    <h1>Acessar conta</h1>
+    <p>Entre na sua conta demonstrativa.</p>
+  </div>
+
+  <form id="formLogin">
+    <input class="campo" id="loginConta"
+      placeholder="Número da conta" required>
+
+    <div class="grupo-senha">
+      <input class="campo" id="loginSenha" type="password"
+        placeholder="Senha" required>
+      <button type="button" class="ver-senha"
+        onclick="alternarSenha('loginSenha')">◉</button>
+    </div>
+
+    <p id="erroLogin" class="mensagem"></p>
+    <button class="botao" type="submit">Entrar</button>
+  </form>
+
+  <p class="rodape">
+    Não tem conta?
+    <button class="link" onclick="mostrar('cadastro')">
+      Criar conta
+    </button>
+  </p>
+</section>
+
+<!-- PAINEL PRINCIPAL -->
+<section id="principal" class="tela oculta">
+  <div class="topo">
+    <button class="icone-topo" onclick="abrirPerfil()">☰</button>
+
+    <div class="logo">
+      <span class="sete">777</span><span class="bank">BANK</span>
+    </div>
+
+    <button class="icone-topo"
+      onclick="alert('Sem notificações.')">♧</button>
+  </div>
+
+  <div class="saudacao">
+    <h2 id="saudacao">Olá!</h2>
+    <p>Acesse sua conta e movimente seu saldo fictício.</p>
+  </div>
+
+  <div class="cartao">
+    <p>Saldo disponível</p>
+    <div class="saldo-linha">
+      <strong id="saldo">R$ ••••••</strong>
+      <button class="olho" onclick="alternarSaldo()">◉</button>
+    </div>
+  </div>
+
+  <div class="grade">
+    <button class="acao" onclick="abrirOperacao('depositar')">
+      <span class="simbolo">↓</span>Depositar
+    </button>
+    <button class="acao" onclick="abrirOperacao('sacar')">
+      <span class="simbolo">↑</span>Sacar
+    </button>
+    <button class="acao" onclick="abrirOperacao('transferir')">
+      <span class="simbolo">⇄</span>Transferir
+    </button>
+    <button class="acao" onclick="abrirExtrato()">
+      <span class="simbolo">▤</span>Ver extrato
+    </button>
+    <button class="acao" onclick="consultarSaldo()">
+      <span class="simbolo">◎</span>Consultar saldo
+    </button>
+    <button class="acao" onclick="abrirPerfil()">
+      <span class="simbolo">▣</span>Completar cadastro
+    </button>
+  </div>
+
+  <button class="botao sair" onclick="abrirSaida()">
+    ⇥ &nbsp; Sair da conta
+  </button>
+
+  <p class="aviso">Valores fictícios • Sem dinheiro real</p>
+</section>
+
+<!-- DEPÓSITO / SAQUE / TRANSFERÊNCIA -->
+<section id="operacao" class="tela oculta">
+  <button class="voltar" onclick="mostrar('principal')">←</button>
+
+  <div class="logo" style="margin-top:25px">
+    <span class="sete">777</span><span class="bank">BANK</span>
+  </div>
+
+  <div class="cabecalho">
+    <h1 id="tituloOperacao">Operação</h1>
+    <p>Movimentação fictícia</p>
+  </div>
+
+  <form id="formOperacao">
+    <div id="campoDestino" class="oculta">
+      <input class="campo" id="destino"
+        placeholder="Número da conta de destino">
+    </div>
+
+    <input class="campo" id="valor"
+      type="number" min="0.01" step="0.01"
+      placeholder="Valor em R$" required>
+
+    <p id="erroOperacao" class="mensagem"></p>
+
+    <button class="botao" type="submit">
+      Confirmar operação
+    </button>
+  </form>
+</section>
+
+<!-- EXTRATO -->
+<section id="extrato" class="tela oculta">
+  <button class="voltar" onclick="mostrar('principal')">←</button>
+
+  <div class="cabecalho">
+    <h1>Extrato</h1>
+    <p>Histórico das movimentações fictícias.</p>
+  </div>
+
+  <div id="listaExtrato" class="info"></div>
+</section>
+
+<!-- PERFIL -->
+<section id="perfil" class="tela oculta">
+  <button class="voltar" onclick="mostrar('principal')">←</button>
+
+  <div class="cabecalho">
+    <h1>Meu cadastro</h1>
+    <p>Confira ou atualize seus dados demonstrativos.</p>
+  </div>
+
+  <div id="infoConta" class="info"></div>
+
+  <form id="formPerfil">
+    <input class="campo" id="perfilNome"
+      placeholder="Nome completo" required>
+    <input class="campo" id="perfilEmail"
+      type="email" placeholder="E-mail" required>
+    <button class="botao" type="submit">
+      Salvar cadastro
+    </button>
+  </form>
+</section>
+
+<!-- CONFIRMAÇÃO DE SAÍDA -->
+<div id="fundoModal" class="fundo-modal oculta">
+  <div class="modal">
+    <div class="coroa">♛</div>
+    <div class="logo">
+      <span class="sete">777</span><span class="bank">BANK</span>
+    </div>
+
+    <div style="font-size:38px;margin-top:20px">⇥</div>
+    <h2>Deseja sair da sua conta?</h2>
+
+    <div class="modal-botoes">
+      <button onclick="fecharSaida()">Não</button>
+      <button class="confirmar" onclick="confirmarSaida()">
+        Sim
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// Demonstração em memória.
+// Nenhuma senha ou movimentação é salva no navegador.
+
+const contas = [];
+let contaAtual = null;
+let proximoNumero = 1;
+let operacaoAtual = "";
+let saldoVisivel = false;
+
+const $ = id => document.getElementById(id);
+
+const dinheiro = centavos =>
+  (centavos / 100).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+
+function mostrar(id) {
+  document.querySelectorAll(".tela").forEach(tela => {
+    tela.classList.add("oculta");
+  });
+  $(id).classList.remove("oculta");
+  window.scrollTo(0, 0);
+}
+
+function alternarSenha(id) {
+  const campo = $(id);
+  campo.type = campo.type === "password" ? "text" : "password";
+}
+
+function definirErro(id, texto) {
+  $(id).textContent = texto;
+}
+
+function atualizarSaldo() {
+  if (!contaAtual) return;
+  $("saldo").textContent = saldoVisivel
+    ? dinheiro(contaAtual.saldo)
+    : "R$ ••••••";
+}
+
+function alternarSaldo() {
+  saldoVisivel = !saldoVisivel;
+  atualizarSaldo();
+}
+
+function consultarSaldo() {
+  saldoVisivel = true;
+  atualizarSaldo();
+  alert("Saldo fictício: " + dinheiro(contaAtual.saldo));
+}
+
+function abrirPainel() {
+  saldoVisivel = false;
+  $("saudacao").textContent = "Olá, " + contaAtual.nome + "!";
+  atualizarSaldo();
+  mostrar("principal");
+}
+
+// CADASTRO
+
+$("formCadastro").addEventListener("submit", evento => {
+  evento.preventDefault();
+
+  const nome = $("cadNome").value.trim();
+  const usuario = $("cadUsuario").value.trim();
+  const email = $("cadEmail").value.trim();
+  const senha = $("cadSenha").value;
+  const confirmar = $("cadConfirma").value;
+
+  definirErro("erroCadastro", "");
+
+  if (nome.length < 3 || usuario.length < 3) {
+    definirErro("erroCadastro", "Preencha nome e usuário corretamente.");
+    return;
+  }
+
+  if (contas.some(c => c.usuario.toLowerCase() === usuario.toLowerCase())) {
+    definirErro("erroCadastro", "Esse usuário já existe.");
+    return;
+  }
+
+  if (senha.length < 8) {
+    definirErro("erroCadastro", "A senha deve ter 8 caracteres ou mais.");
+    return;
+  }
+
+  if (senha !== confirmar) {
+    definirErro("erroCadastro", "As senhas não são iguais.");
+    return;
+  }
+
+  const numero = String(proximoNumero++).padStart(3, "0");
+
+  contas.push({
+    numero,
+    nome,
+    usuario,
+    email,
+    senha,
+    saldo: 10000,
+    extrato: [{
+      descricao: "Saldo inicial demonstrativo",
+      valor: 10000,
+      data: new Date().toLocaleString("pt-BR")
+    }]
+  });
+
+  $("formCadastro").reset();
+
+  alert(
+    "Conta demonstrativa criada!\n" +
+    "Número: " + numero +
+    "\nSaldo inicial: R$ 100,00\n" +
+    "Anote o número. Os dados serão perdidos ao atualizar."
+  );
+
+  $("loginConta").value = numero;
+  mostrar("login");
+});
+
+// LOGIN
+
+$("formLogin").addEventListener("submit", evento => {
+  evento.preventDefault();
+
+  const numero = $("loginConta").value.trim();
+  const senha = $("loginSenha").value;
+
+  const encontrada = contas.find(c =>
+    c.numero === numero && c.senha === senha
+  );
+
+  if (!encontrada) {
+    definirErro(
+      "erroLogin",
+      "Conta ou senha incorreta. Crie uma conta de teste primeiro."
+    );
+    return;
+  }
+
+  definirErro("erroLogin", "");
+  $("formLogin").reset();
+  contaAtual = encontrada;
+  abrirPainel();
+});
+
+// OPERAÇÕES
+
+function abrirOperacao(tipo) {
+  operacaoAtual = tipo;
+
+  const titulos = {
+    depositar: "Depositar",
+    sacar: "Sacar",
+    transferir: "Transferir"
+  };
+
+  $("tituloOperacao").textContent = titulos[tipo];
+  $("campoDestino").classList.toggle("oculta", tipo !== "transferir");
+  $("destino").required = tipo === "transferir";
+  $("formOperacao").reset();
+  definirErro("erroOperacao", "");
+  mostrar("operacao");
+}
+
+function registrar(conta, descricao, valor) {
+  conta.extrato.unshift({
+    descricao,
+    valor,
+    data: new Date().toLocaleString("pt-BR")
+  });
+}
+
+$("formOperacao").addEventListener("submit", evento => {
+  evento.preventDefault();
+
+  if (!contaAtual) return;
+
+  const valorTexto = $("valor").value;
+  const valorNumero = Number(valorTexto);
+  const centavos = Math.round(valorNumero * 100);
+
+  definirErro("erroOperacao", "");
+
+  if (
+    !Number.isFinite(valorNumero) ||
+    valorNumero <= 0 ||
+    !Number.isSafeInteger(centavos) ||
+    centavos > 100000000
+  ) {
+    definirErro(
+      "erroOperacao",
+      "Digite um valor válido de até R$ 1.000.000,00."
+    );
+    return;
+  }
+
+  if (operacaoAtual === "depositar") {
+    if (!Number.isSafeInteger(contaAtual.saldo + centavos)) {
+      definirErro("erroOperacao", "Limite de saldo excedido.");
+      return;
+    }
+    contaAtual.saldo += centavos;
+    registrar(contaAtual, "Depósito fictício", centavos);
+  }
+
+  if (operacaoAtual === "sacar") {
+    if (centavos > contaAtual.saldo) {
+      definirErro("erroOperacao", "Saldo insuficiente.");
+      return;
+    }
+    contaAtual.saldo -= centavos;
+    registrar(contaAtual, "Saque fictício", -centavos);
+  }
+
+  if (operacaoAtual === "transferir") {
+    const numeroDestino = $("destino").value.trim();
+    const destinatario = contas.find(c => c.numero === numeroDestino);
+
+    if (!destinatario) {
+      definirErro("erroOperacao", "Conta de destino não encontrada.");
+      return;
+    }
+
+    if (destinatario === contaAtual) {
+      definirErro("erroOperacao", "Não transfira para a mesma conta.");
+      return;
+    }
+
+    if (centavos > contaAtual.saldo) {
+      definirErro("erroOperacao", "Saldo insuficiente.");
+      return;
+    }
+
+    if (!Number.isSafeInteger(destinatario.saldo + centavos)) {
+      definirErro("erroOperacao", "Limite do destinatário excedido.");
+      return;
+    }
+
+    const confirmado = confirm(
+      "Transferir " + dinheiro(centavos) +
+      " para " + destinatario.nome + "?"
+    );
+
+    if (!confirmado) return;
+
+    contaAtual.saldo -= centavos;
+    destinatario.saldo += centavos;
+
+    registrar(
+      contaAtual,
+      "Transferência para conta " + destinatario.numero,
+      -centavos
+    );
+
+    registrar(
+      destinatario,
+      "Transferência recebida da conta " + contaAtual.numero,
+      centavos
+    );
+  }
+
+  alert("Operação fictícia realizada com sucesso!");
+  atualizarSaldo();
+  mostrar("principal");
+});
+
+// EXTRATO
+
+function abrirExtrato() {
+  if (!contaAtual) return;
+
+  const lista = $("listaExtrato");
+  lista.replaceChildren();
+
+  if (!contaAtual.extrato.length) {
+    lista.textContent = "Nenhuma movimentação.";
+  }
+
+  contaAtual.extrato.forEach(item => {
+    const linha = document.createElement("div");
+    linha.className = "item-extrato";
+
+    const descricao = document.createElement("div");
+    descricao.textContent = item.descricao;
+
+    const data = document.createElement("small");
+    data.textContent = item.data;
+    descricao.appendChild(data);
+
+    const valor = document.createElement("strong");
+    valor.className = item.valor >= 0 ? "positivo" : "negativo";
+    valor.textContent =
+      (item.valor >= 0 ? "+" : "-") + dinheiro(Math.abs(item.valor));
+
+    linha.append(descricao, valor);
+    lista.appendChild(linha);
+  });
+
+  mostrar("extrato");
+}
+
+// PERFIL
+
+function abrirPerfil() {
+  if (!contaAtual) return;
+
+  $("infoConta").textContent =
+    "Conta: " + contaAtual.numero +
+    " | Usuário: " + contaAtual.usuario;
+
+  $("perfilNome").value = contaAtual.nome;
+  $("perfilEmail").value = contaAtual.email;
+
+  mostrar("perfil");
+}
+
+$("formPerfil").addEventListener("submit", evento => {
+  evento.preventDefault();
+
+  if (!contaAtual) return;
+
+  const nome = $("perfilNome").value.trim();
+  const email = $("perfilEmail").value.trim();
+
+  if (nome.length < 3) {
+    alert("Informe um nome válido.");
+    return;
+  }
+
+  contaAtual.nome = nome;
+  contaAtual.email = email;
+
+  alert("Cadastro demonstrativo atualizado!");
+  $("saudacao").textContent = "Olá, " + contaAtual.nome + "!";
+  mostrar("principal");
+});
+
+// SAIR DA CONTA
+
+function abrirSaida() {
+  $("fundoModal").classList.remove("oculta");
+}
+
+function fecharSaida() {
+  $("fundoModal").classList.add("oculta");
+}
+
+function confirmarSaida() {
+  fecharSaida();
+  contaAtual = null;
+  saldoVisivel = false;
+  mostrar("entrada");
+}
+
+// TELEGRAM
+
+if (window.Telegram && window.Telegram.WebApp) {
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+}
+</script>
+</body>
+</html>
